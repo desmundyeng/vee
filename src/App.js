@@ -132,6 +132,19 @@ function App() {
             validationRange={validationRange}
           />
 
+          {/* Debug: Print Manual Edit values above the chart */}
+          <div className="bg-yellow-50 border border-yellow-200 rounded p-4 mb-4 text-xs text-gray-700">
+            <div className="font-semibold mb-2">Manual Edit Values (Debug):</div>
+            <ul className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-1">
+              {data.map(row => (
+                <li key={row.ds} className="flex justify-between">
+                  <span>{row.ds}</span>
+                  <span className="font-mono">{row.setValue || <span className="text-gray-400">(empty)</span>}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Main Content - Horizontal Layout */}
           <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left Column - Steps */}

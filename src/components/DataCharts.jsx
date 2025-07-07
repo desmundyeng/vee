@@ -16,8 +16,10 @@ const DataCharts = ({ data }) => {
     date: row.ds,
     original: row.y,
     clean: row.y_clean,
-    isValid: row.is_valid,
-    status: row.is_valid ? 'Valid' : 'Invalid'
+    setValue: (row.setValue !== '' && row.setValue !== null && row.setValue !== undefined && !isNaN(Number(row.setValue)))
+      ? Number(row.setValue)
+      : (row.y_clean !== null && row.y_clean !== undefined && !isNaN(Number(row.y_clean)) ? Number(row.y_clean) : null),
+    status: row.status ? 'Valid' : 'Invalid'
   }));
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -56,7 +58,7 @@ const DataCharts = ({ data }) => {
           stroke="#6b7280" 
           strokeWidth={2}
           dot={{ fill: '#6b7280', strokeWidth: 2, r: 4 }}
-          name="Original Values"
+          name="Original"
         />
         <Line 
           type="monotone" 
@@ -64,7 +66,15 @@ const DataCharts = ({ data }) => {
           stroke="#2563eb" 
           strokeWidth={3}
           dot={{ fill: '#2563eb', strokeWidth: 2, r: 5 }}
-          name="Clean Values"
+          name="Estimated"
+        />
+        <Line 
+          type="monotone" 
+          dataKey="setValue" 
+          stroke="#f59e42" 
+          strokeWidth={3}
+          dot={{ fill: '#f59e42', strokeWidth: 2, r: 5 }}
+          name="Manual Edit"
         />
       </LineChart>
     </ResponsiveContainer>
