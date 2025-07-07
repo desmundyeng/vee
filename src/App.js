@@ -113,7 +113,7 @@ function App() {
             </div>
           </div>
           {/* Step 1 and Step 2 side by side */}
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 ">
             <ValidationStep 
               onValidate={handleValidate}
               data={data}
