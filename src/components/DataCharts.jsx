@@ -16,6 +16,12 @@ const LINE_KEYS = [
   { key: 'setValue', name: 'Manual Edit', color: '#f59e42' },
 ];
 
+const LINE_STYLES = {
+  original: { strokeDasharray: '' }, // solid
+  clean: { strokeDasharray: '6 3' }, // dashed
+  setValue: { strokeDasharray: '2 2' }, // dotted
+};
+
 const DataCharts = ({ data }) => {
   // Prepare data for charts
   const chartData = data.map(row => ({
@@ -80,6 +86,7 @@ const DataCharts = ({ data }) => {
             dot={{ fill: line.color, strokeWidth: 2, r: 5 }}
             name={line.name}
             hide={!visible[line.key]}
+            strokeDasharray={LINE_STYLES[line.key]?.strokeDasharray}
           />
         )}
       </LineChart>
