@@ -10,6 +10,12 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+const LINE_KEYS = [
+  { key: 'original', name: 'Original', color: '#6b7280' },
+  { key: 'clean', name: 'Estimated', color: '#2563eb' },
+  { key: 'setValue', name: 'Manual Edit', color: '#f59e42' },
+];
+
 const DataCharts = ({ data }) => {
   // Prepare data for charts
   const chartData = data.map(row => ({
@@ -21,6 +27,18 @@ const DataCharts = ({ data }) => {
       : (row.y_clean !== null && row.y_clean !== undefined && !isNaN(Number(row.y_clean)) ? Number(row.y_clean) : null),
     status: row.status ? 'Valid' : 'Invalid'
   }));
+
+  // State for toggling line visibility
+  const [visible, setVisible] = React.useState({
+    original: true,
+    clean: true,
+    setValue: true,
+  });
+
+  const handleLegendClick = (o) => {
+    const key = o.dataKey;
+    setVisible(prev => ({ ...prev, [key]: !prev[key] }));
+  };
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -51,31 +69,19 @@ const DataCharts = ({ data }) => {
         />
         <YAxis />
         <Tooltip content={<CustomTooltip />} />
-        <Legend />
-        <Line 
-          type="monotone" 
-          dataKey="original" 
-          stroke="#6b7280" 
-          strokeWidth={2}
-          dot={{ fill: '#6b7280', strokeWidth: 2, r: 4 }}
-          name="Original"
-        />
-        <Line 
-          type="monotone" 
-          dataKey="clean" 
-          stroke="#2563eb" 
-          strokeWidth={3}
-          dot={{ fill: '#2563eb', strokeWidth: 2, r: 5 }}
-          name="Estimated"
-        />
-        <Line 
-          type="monotone" 
-          dataKey="setValue" 
-          stroke="#f59e42" 
-          strokeWidth={3}
-          dot={{ fill: '#f59e42', strokeWidth: 2, r: 5 }}
-          name="Manual Edit"
-        />
+        <Legend verticalAlign="top" onClick={handleLegendClick} />
+        {LINE_KEYS.map(line =>
+          <Line
+            key={line.key}
+            type="monotone"
+            dataKey={line.key}
+            stroke={line.color}
+            strokeWidth={line.key === 'original' ? 2 : 3}
+            dot={{ fill: line.color, strokeWidth: 2, r: 5 }}
+            name={line.name}
+            hide={!visible[line.key]}
+          />
+        )}
       </LineChart>
     </ResponsiveContainer>
   );

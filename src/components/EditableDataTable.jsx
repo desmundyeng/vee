@@ -55,13 +55,13 @@ export function EditableDataTable({ data, setManualValue, validationRange }) {
                     return (
                         <>
                             {row.is_valid && (
-                                <Badge variant="success" className="w-[80px] flex justify-center items-center">Valid</Badge>
+                                <Badge variant="success" className="w-[120px] flex justify-center items-center">Valid</Badge>
                             )}
                             {!isEmpty && !row.is_valid && outOfRange && (
-                                <Badge variant="warning" className="w-[80px] flex justify-center items-center">Out of Range</Badge>
+                                <Badge variant="warning" className="w-[120px] flex justify-center items-center">Out of Range</Badge>
                             )}
                             {isEmpty && (
-                                <Badge variant="warning" className="w-[80px] flex justify-center items-center">No data</Badge>
+                                <Badge variant="warning" className="w-[120px] flex justify-center items-center">No data</Badge>
                             )}
                         </>
                     );
