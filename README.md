@@ -1,3 +1,12 @@
+# Vee Cleaner
+
+This app implements the requirements from requirements.md:
+
+- Interactive data validation, estimation, and editing for time series data
+- Step-by-step workflow: validation, estimation (interpolation), and editing
+- Supports both single and bulk editing of data points
+- Built with React, Tailwind CSS, and shadcn/ui components
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

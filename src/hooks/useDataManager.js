@@ -1,0 +1,154 @@
+import { useState, useCallback } from 'react';
+
+// Sample data matching the original Python code
+let initialData = [
+  { ds: '2024-01-01 00:00:00', y: 100, is_valid: true, y_clean: 100, setValue: '' },
+  { ds: '2024-01-01 01:00:00', y: 102, is_valid: true, y_clean: 102, setValue: '' },
+  { ds: '2024-01-01 02:00:00', y: null, is_valid: false, y_clean: null, setValue: '' },
+  { ds: '2024-01-01 03:00:00', y: 3000, is_valid: true, y_clean: null, setValue: '' },
+  { ds: '2024-01-01 04:00:00', y: 106, is_valid: true, y_clean: 106, setValue: '' },
+  { ds: '2024-01-01 05:00:00', y: 108, is_valid: true, y_clean: 108, setValue: '' },
+  { ds: '2024-01-01 06:00:00', y: null, is_valid: false, y_clean: null, setValue: '' },
+  { ds: '2024-01-01 07:00:00', y: 110, is_valid: true, y_clean: 110, setValue: '' },
+  { ds: '2024-01-01 08:00:00', y: 112, is_valid: true, y_clean: 112, setValue: '' },
+  { ds: '2024-01-01 09:00:00', y: 20000, is_valid: true, y_clean: null, setValue: '' },
+];
+
+export const useDataManager = () => {
+  const [data, setData] = useState(initialData);
+  const [originalData] = useState(initialData);
+
+  // Step 1: Validation
+  const validateData = useCallback((minVal, maxVal) => {
+    setData(prevData => 
+      prevData.map(row => ({
+        ...row,
+        is_valid: row.y !== null && row.y >= minVal && row.y <= maxVal
+        // Preserve existing y_clean values - don't reset them
+      }))
+    );
+  }, []);
+
+  // Step 2: Estimation (Interpolation)
+  const estimateData = useCallback(() => {
+    setData(prevData => {
+      const newData = [...prevData];
+      // Set invalid values to null for interpolation, but skip locked rows
+      newData.forEach(row => {
+        if (row.lock) {
+          // Do not change locked rows
+          return;
+        }
+        if (!row.is_valid) {
+          row.y_clean = null;
+        } else {
+          row.y_clean = row.y;
+        }
+      });
+      // Simple linear interpolation, skipping locked rows
+      for (let i = 0; i < newData.length; i++) {
+        if (newData[i].lock) continue; // skip locked
+        if (newData[i].y_clean === null) {
+          // Find previous valid value (not locked)
+          let prevValid = null;
+          let prevIndex = i - 1;
+          while (prevIndex >= 0 && prevValid === null) {
+            if (!newData[prevIndex].lock && newData[prevIndex].y_clean !== null) {
+              prevValid = newData[prevIndex].y_clean;
+            }
+            prevIndex--;
+          }
+          // Find next valid value (not locked)
+          let nextValid = null;
+          let nextIndex = i + 1;
+          while (nextIndex < newData.length && nextValid === null) {
+            if (!newData[nextIndex].lock && newData[nextIndex].y_clean !== null) {
+              nextValid = newData[nextIndex].y_clean;
+            }
+            nextIndex++;
+          }
+          // Interpolate
+          if (prevValid !== null && nextValid !== null) {
+            const totalSteps = nextIndex - prevIndex - 2;
+            const currentStep = i - prevIndex - 1;
+            newData[i].y_clean = prevValid + (nextValid - prevValid) * (currentStep / totalSteps);
+          } else if (prevValid !== null) {
+            newData[i].y_clean = prevValid;
+          } else if (nextValid !== null) {
+            newData[i].y_clean = nextValid;
+          }
+        }
+      }
+      // Also update initialData with new y_clean values
+      initialData = initialData.map((row, i) => ({ ...row, y_clean: newData[i].y_clean }));
+      return newData;
+    });
+  }, []);
+
+  // Step 3: Single Edit
+  const editSingleValue = useCallback((date, value) => {
+    setData(prevData => 
+      prevData.map(row => 
+        row.ds === date 
+          ? { ...row, y_clean: parseFloat(value), is_valid: true }
+          : row
+      )
+    );
+  }, []);
+
+  // Step 3: Bulk Edit
+  const editBulkValues = useCallback((edits) => {
+    setData(prevData => {
+      const newData = [...prevData];
+      edits.forEach(edit => {
+        const rowIndex = newData.findIndex(row => row.ds === edit.date);
+        if (rowIndex !== -1) {
+          newData[rowIndex] = {
+            ...newData[rowIndex],
+            y_clean: parseFloat(edit.value),
+            is_valid: true
+          };
+        }
+      });
+      return newData;
+    });
+  }, []);
+
+  // Reset data to original
+  const resetData = useCallback(() => {
+    setData(originalData);
+  }, [originalData]);
+
+  // Set lock state for rows
+  const setLocks = useCallback((locks) => {
+    setData(prevData => prevData.map((row, i) => ({ ...row, lock: locks[i] })));
+  }, []);
+
+  // Set manual value for a row (for Set Value dialog)
+  const setManualValue = useCallback((date, value) => {
+    // Update in-memory initialData as well
+    initialData = initialData.map(row =>
+      row.ds === date
+        ? { ...row, setValue: value }
+        : row
+    );
+    setData(prevData =>
+      prevData.map(row =>
+        row.ds === date
+          ? { ...row, setValue: value }
+          : row
+      )
+    );
+  }, []);
+
+  return {
+    data,
+    validateData,
+    estimateData,
+    editSingleValue,
+    editBulkValues,
+    resetData,
+    setLocks,
+    setManualValue,
+  };
+}; 
