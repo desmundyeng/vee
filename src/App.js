@@ -9,8 +9,21 @@ import DataSummary from "./components/DataSummary";
 import { Button } from "./components/ui/button";
 import { RotateCcw, Download } from "lucide-react";
 import { EditableDataTable } from "./components/EditableDataTable";
+import { Input } from "./components/ui/input";
 
 function App() {
+  // Calculate default start (3 days ago, 00:00) and end (yesterday, 00:00)
+  let now = new Date();
+  let defaultStart = new Date(now);
+  defaultStart.setDate(now.getDate() - 3);
+  defaultStart.setHours(0, 0, 0, 0);
+  const defaultEnd = new Date(now);
+  defaultEnd.setDate(now.getDate() - 1);
+  defaultEnd.setHours(0, 0, 0, 0);
+
+  const [startDateTime, setStartDateTime] = useState(formatDateTimeLocal(defaultStart));
+  const [endDateTime, setEndDateTime] = useState(formatDateTimeLocal(defaultEnd));
+  
   const {
     data,
     validateData,
@@ -21,7 +34,8 @@ function App() {
     setLocks,
     originalData,
     setManualValue,
-  } = useDataManager();
+    updateDataForNewRange,
+  } = useDataManager(startDateTime, endDateTime);
 
   const dataMin = useMemo(() => {
     const vals = data.map(row => row.y).filter(v => typeof v === 'number');
@@ -63,6 +77,17 @@ function App() {
     estimateData();
   }, [validationRange, estimateData]);
 
+  // Update validation range when data changes
+  useEffect(() => {
+    setValidationRange([dataMin, dataMax]);
+  }, [dataMin, dataMax]);
+
+  // Helper to format date to yyyy-MM-ddTHH:mm for datetime-local
+  function formatDateTimeLocal(date) {
+    const pad = n => n.toString().padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
@@ -78,8 +103,42 @@ function App() {
             </p>
           </div>
 
+          {/* Date/Time Pickers */}
+          <div className="flex flex-col md:flex-row gap-4 items-center justify-center bg-white rounded-lg shadow p-4">
+            <div className="flex flex-col items-start w-full md:w-auto">
+              <label htmlFor="start-datetime" className="mb-1 font-medium text-gray-700">Start Date/Time</label>
+              <Input
+                id="start-datetime"
+                type="datetime-local"
+                value={startDateTime}
+                onChange={e => setStartDateTime(e.target.value)}
+                className="w-56"
+              />
+            </div>
+            <div className="flex flex-col items-start w-full md:w-auto">
+              <label htmlFor="end-datetime" className="mb-1 font-medium text-gray-700">End Date/Time</label>
+              <Input
+                id="end-datetime"
+                type="datetime-local"
+                value={endDateTime}
+                onChange={e => setEndDateTime(e.target.value)}
+                className="w-56"
+              />
+            </div>
+            <div className="flex items-end">
+              <Button
+                onClick={updateDataForNewRange}
+                className="h-10"
+              >
+                Generate Data
+              </Button>
+              
+            </div>
+          </div>
+
+
           {/* Action Buttons */}
-          <div className="flex justify-center gap-4">
+          {/* <div className="flex justify-center gap-4">
             <Button
               variant="outline"
               onClick={resetData}
@@ -95,7 +154,7 @@ function App() {
               <Download className="h-4 w-4" />
               Export CSV
             </Button>
-          </div>
+          </div> */}
 
           {/* Data Overview and Time Series Chart Side by Side */}
           {/* <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8">

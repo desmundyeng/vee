@@ -1,7 +1,55 @@
 import { useState, useCallback } from 'react';
 
-// Sample data matching the original Python code
-let initialData = [
+// Helper function to generate data for a given date range
+function generateDataForRange(startDateTime, endDateTime) {
+  const start = new Date(startDateTime);
+  const end = new Date(endDateTime);
+  const data = [];
+  
+  // Helper function to format number to xxxxx.xxxx format
+  function formatNumber(num) {
+    return parseFloat(num.toFixed(4));
+  }
+  
+  // Generate hourly data points
+  const current = new Date(start);
+  while (current <= end) {
+    const ds = current.toISOString().slice(0, 19).replace('T', ' ');
+    const hour = current.getHours();
+    
+    // Generate some realistic time series data with some anomalies
+    // Base value around 10000 (5 digits) with daily cycle
+    let y = 10000 + Math.sin(hour / 24 * 2 * Math.PI) * 2000 + Math.random() * 500;
+    
+    // Add some null values and anomalies
+    if (Math.random() < 0.1) {
+      y = null; // 10% chance of null
+    } else if (Math.random() < 0.05) {
+      y = y * 2; // 5% chance of anomaly (2x value)
+    }
+    
+    // Format the number to xxxxx.xxxx
+    if (y !== null) {
+      y = formatNumber(y);
+    }
+    
+    data.push({
+      ds,
+      y,
+      is_valid: y !== null && y >= 5000 && y <= 20000, // Adjusted validation range for 5-digit numbers
+      y_clean: y !== null && y >= 5000 && y <= 20000 ? y : null,
+      setValue: ''
+    });
+    
+    // Move to next hour
+    current.setHours(current.getHours() + 1);
+  }
+  
+  return data;
+}
+
+// Sample data matching the original Python code (fallback)
+const fallbackData = [
   { ds: '2024-01-01 00:00:00', y: 100, is_valid: true, y_clean: 100, setValue: '' },
   { ds: '2024-01-01 01:00:00', y: 102, is_valid: true, y_clean: 102, setValue: '' },
   { ds: '2024-01-01 02:00:00', y: null, is_valid: false, y_clean: null, setValue: '' },
@@ -14,9 +62,24 @@ let initialData = [
   { ds: '2024-01-01 09:00:00', y: 20000, is_valid: true, y_clean: null, setValue: '' },
 ];
 
-export const useDataManager = () => {
-  const [data, setData] = useState(initialData);
-  const [originalData] = useState(initialData);
+export const useDataManager = (startDateTime, endDateTime) => {
+  // Generate initial data based on the provided date range
+  const getInitialData = useCallback(() => {
+    if (!startDateTime || !endDateTime) {
+      return fallbackData;
+    }
+    return generateDataForRange(startDateTime, endDateTime);
+  }, [startDateTime, endDateTime]);
+
+  const [data, setData] = useState(getInitialData);
+  const [originalData, setOriginalData] = useState(getInitialData);
+
+  // Update data when date range changes
+  const updateDataForNewRange = useCallback(() => {
+    const newData = getInitialData();
+    setData(newData);
+    setOriginalData(newData);
+  }, [getInitialData]);
 
   // Step 1: Validation
   const validateData = useCallback((minVal, maxVal) => {
@@ -79,8 +142,6 @@ export const useDataManager = () => {
           }
         }
       }
-      // Also update initialData with new y_clean values
-      initialData = initialData.map((row, i) => ({ ...row, y_clean: newData[i].y_clean }));
       return newData;
     });
   }, []);
@@ -126,12 +187,6 @@ export const useDataManager = () => {
 
   // Set manual value for a row (for Set Value dialog)
   const setManualValue = useCallback((date, value) => {
-    // Update in-memory initialData as well
-    initialData = initialData.map(row =>
-      row.ds === date
-        ? { ...row, setValue: value }
-        : row
-    );
     setData(prevData =>
       prevData.map(row =>
         row.ds === date
@@ -150,5 +205,7 @@ export const useDataManager = () => {
     resetData,
     setLocks,
     setManualValue,
+    originalData,
+    updateDataForNewRange,
   };
 }; 
