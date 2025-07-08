@@ -1,79 +1,60 @@
-# Vee Cleaner
 
-This app implements the requirements from requirements.md:
 
-- Interactive data validation, estimation, and editing for time series data
-- Step-by-step workflow: validation, estimation (interpolation), and editing
-- Supports both single and bulk editing of data points
-- Built with React, Tailwind CSS, and shadcn/ui components
+# VEE: Validation, Estimation, and Editing for Time Series Data
 
-# Getting Started with Create React App
+VEE is an interactive web application for cleaning, validating, estimating, and manually editing time series data. It is designed to help users quickly identify outliers, interpolate missing or invalid values, and make manual corrections—all with real-time feedback and visualizations.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## What is VEE?
 
-## Available Scripts
+**VEE** stands for **Validation, Estimation, and Editing**:
+- **Validation:** Automatically flag and filter out-of-range or missing data points.
+- **Estimation:** Interpolate or estimate missing/invalid values using linear interpolation.
+- **Editing:** Manually override or correct any value, with changes reflected instantly in the data table and chart.
 
-In the project directory, you can run:
+## Features
+- Step-by-step workflow for time series data cleaning
+- Interactive table with status badges and manual edit dialog
+- Live-updating time series chart with original, estimated, and manual values
+- Date/time range picker to generate synthetic data for any period
+- All values formatted to 4 decimals (xxxxx.xxxx)
+- Debug section for manual and epoch values
 
-### `npm start`
+## Demo
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+👉 **[View the live demo on GitHub Pages](https://your-github-username.github.io/vee/)**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+> Replace the above link with your actual GitHub Pages deployment URL.
 
-### `npm test`
+## Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
+- Node.js (v16 or newer recommended)
+- npm (v8 or newer)
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Running Locally
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm start
+```
 
-### `npm run eject`
+The app will be available at [http://localhost:3000](http://localhost:3000).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Building for Production
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run build
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## License
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This project is open source and you are free to use, modify, and distribute it as you wish.
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**VEE** is built with React, Tailwind CSS, and Recharts. Contributions and feedback are welcome!

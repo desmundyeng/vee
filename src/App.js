@@ -7,7 +7,7 @@ import DataTable from "./components/DataTable";
 import DataCharts from "./components/DataCharts";
 import DataSummary from "./components/DataSummary";
 import { Button } from "./components/ui/button";
-import { RotateCcw, Download } from "lucide-react";
+import { RotateCcw, Download, Github } from "lucide-react";
 import { EditableDataTable } from "./components/EditableDataTable";
 import { Input } from "./components/ui/input";
 
@@ -93,13 +93,24 @@ function App() {
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="space-y-8">
           {/* Header */}
-          <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold text-gray-900">
-            Validation, Estimation, and Editing (VEE)
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h1 className="text-4xl font-bold text-gray-900">
+                Validation, Estimation, and Editing (VEE)
+              </h1>
+              <a
+                href="https://github.com/desmundyeng/vee"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub Repository"
+                className="hover:opacity-80 ml-4"
+              >
+                <Github className="w-8 h-8 text-gray-700" />
+              </a>
+            </div>
+            <p className="text-lg text-gray-600 ">
               Interactive data validation, estimation, and editing for time series data.
-              Clean your data step by step with real-time feedback and visualizations.
+              Clean data step by step with real-time feedback and visualizations.
             </p>
           </div>
 
