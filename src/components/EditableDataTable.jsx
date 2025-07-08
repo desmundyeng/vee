@@ -26,7 +26,9 @@ import {
     DialogDescription,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Pencil } from "lucide-react";
+import { Edit, Pencil } from "lucide-react";
+
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 // DataTable expects data in this format:
 export function EditableDataTable({ data, setManualValue, validationRange }) {
@@ -143,10 +145,15 @@ export function EditableDataTable({ data, setManualValue, validationRange }) {
     });
 
     return (
+        <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Edit className="h-5 w-5 text-amber-500" />
+            Step 3: Editing
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
         <div className="w-full">
-            <div className="mb-4 text-xl font-semibold flex items-center gap-2">
-                <span>Step 3: Editing</span>
-            </div>
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -174,6 +181,8 @@ export function EditableDataTable({ data, setManualValue, validationRange }) {
                 </Table>
             </div>
         </div>
+        </CardContent>
+        </Card>
     );
 }
 

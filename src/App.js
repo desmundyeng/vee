@@ -106,7 +106,7 @@ function App() {
           {/* Date/Time Pickers */}
           <div className="flex flex-col md:flex-row gap-4 items-center justify-center bg-white rounded-lg shadow p-4">
             <div className="flex flex-col items-start w-full md:w-auto">
-              <label htmlFor="start-datetime" className="mb-1 font-medium text-gray-700">Start Date/Time</label>
+              <label htmlFor="start-datetime" className="mb-1 font-medium text-gray-700">Start Date Time</label>
               <Input
                 id="start-datetime"
                 type="datetime-local"
@@ -115,8 +115,11 @@ function App() {
                 className="w-56"
               />
             </div>
+            <div className="h-full center pt-6">
+              -
+            </div>
             <div className="flex flex-col items-start w-full md:w-auto">
-              <label htmlFor="end-datetime" className="mb-1 font-medium text-gray-700">End Date/Time</label>
+              <label htmlFor="end-datetime" className="mb-1 font-medium text-gray-700">End Date Time</label>
               <Input
                 id="end-datetime"
                 type="datetime-local"
@@ -125,10 +128,9 @@ function App() {
                 className="w-56"
               />
             </div>
-            <div className="flex items-end">
+            <div className="flex items-end pt-7">
               <Button
                 onClick={updateDataForNewRange}
-                className="h-10"
               >
                 Generate Data
               </Button>
