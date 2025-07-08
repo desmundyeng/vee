@@ -78,27 +78,41 @@ const ValidationStep = ({ onValidate, data, originalData, validationRange }) => 
                 type="text"
                 min={MIN}
                 max={validationRange[1] - MIN_DISTANCE}
-                value={validationRange[0]}
+                value={Number(validationRange[0]).toFixed(4)}
                 onChange={e => {
                   // Only allow numbers (including negative)
                   const val = e.target.value;
-                  if (/^-?\d*$/.test(val)) {
+                  if (/^-?\d*(\.\d{0,4})?$/.test(val)) {
                     handleInputChange(0, val);
                   }
                 }}
-                className="w-24 text-center"
+                className="w-28 text-right"
               />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 flex flex-col items-center">
+              <div className="flex justify-between w-full mb-1">
+                {/* <span className="text-xs text-gray-500" style={{ flex: 1, textAlign: 'left' }}>
+                  Min: {validationRange[0]}
+                </span>
+                <span className="text-xs text-gray-500" style={{ flex: 1, textAlign: 'right', visibility: 'hidden' }}>
+                  Max: {validationRange[1]}
+                </span> */}
+              </div>
               <DualRangeSlider
                 value={validationRange}
                 min={MIN}
                 max={MAX}
                 step={1}
                 onValueChange={handleRangeChange}
-                label={val => val}
-                labelPosition="top"
               />
+              {/* <div className="flex justify-between w-full mt-1">
+                <span className="text-xs text-gray-500" style={{ flex: 1, textAlign: 'left', visibility: 'hidden' }}>
+                  Min: {validationRange[0]}
+                </span>
+                <span className="text-xs text-gray-500" style={{ flex: 1, textAlign: 'right' }}>
+                  Max: {validationRange[1]}
+                </span>
+              </div> */}
             </div>
             <div className="flex flex-col items-center">
               <label className="text-xs text-gray-500">Max</label>
@@ -106,15 +120,15 @@ const ValidationStep = ({ onValidate, data, originalData, validationRange }) => 
                 type="text"
                 min={validationRange[0] + MIN_DISTANCE}
                 max={MAX}
-                value={validationRange[1]}
+                value={Number(validationRange[1]).toFixed(4)}
                 onChange={e => {
                   // Only allow numbers (including negative)
                   const val = e.target.value;
-                  if (/^-?\d*$/.test(val)) {
+                  if (/^-?\d*(\.\d{0,4})?$/.test(val)) {
                     handleInputChange(1, val);
                   }
                 }}
-                className="w-24 text-center"
+                className="w-28 text-right"
               />
             </div>
           </div>
