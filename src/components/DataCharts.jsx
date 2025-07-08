@@ -26,6 +26,7 @@ const DataCharts = ({ data }) => {
   // Prepare data for charts
   const chartData = data.map(row => ({
     date: row.ds,
+    epoch: row.epochSecond,
     original: row.y,
     clean: row.y_clean,
     setValue: (row.setValue !== '' && row.setValue !== null && row.setValue !== undefined && !isNaN(Number(row.setValue)))
@@ -46,11 +47,21 @@ const DataCharts = ({ data }) => {
     setVisible(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
+  function formatEpochToLocal(epochSec) {
+    if (!epochSec) return '';
+    const date = new Date(epochSec * 1000);
+    console.log(date);
+    console.log(epochSec);
+    const pad = n => n.toString().padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+  }
+
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
+      const formattedLabel = formatEpochToLocal(label);
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-medium">{`Date: ${label}`}</p>
+          <p className="font-medium">{`Date: ${formattedLabel}`}</p>
           {payload.map((entry, index) => (
             <p key={index} style={{ color: entry.color }}>
               {`${entry.name}: ${entry.value || 'NaN'}`}
@@ -62,16 +73,22 @@ const DataCharts = ({ data }) => {
     return null;
   };
 
+  const minEpoch = Math.min(...chartData.map(d => d.epoch));
+  const maxEpoch = Math.max(...chartData.map(d => d.epoch));
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis 
-          dataKey="date" 
+        <XAxis
+          dataKey="epoch"
           angle={-45}
           textAnchor="end"
           height={80}
           interval={0}
+          tickFormatter={value => formatEpochToLocal(value)}
+          domain={[minEpoch, maxEpoch]}
+          type="number"
         />
         <YAxis />
         <Tooltip content={<CustomTooltip />} />

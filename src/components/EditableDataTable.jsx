@@ -30,14 +30,25 @@ import { Pencil } from "lucide-react";
 
 // DataTable expects data in this format:
 export function EditableDataTable({ data, setManualValue, validationRange }) {
+    function formatEpochToLocal(epochSec) {
+        if (!epochSec) return '';
+        const date = new Date(epochSec * 1000);
+        console.log(date);
+        console.log(epochSec);
+        const pad = n => n.toString().padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    }
+
     const columns = React.useMemo(
         () => [
             {
-                accessorKey: "ds",
+                accessorKey: "epochSecond",
                 header: (
                     <span>Date</span>
                 ),
-                cell: (info) => <span className="font-medium">{info.getValue()}</span>,
+                cell: (info) => {
+                    return (<span className="font-medium">{formatEpochToLocal(info.row.original.epochSecond)}</span>)
+                },
             },
             {
                 accessorKey: "is_valid",

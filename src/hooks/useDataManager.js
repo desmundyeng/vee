@@ -33,13 +33,15 @@ function generateDataForRange(startDateTime, endDateTime) {
       y = formatNumber(y);
     }
     
+    console.log("c" + current.getTime())
     data.push({
       ds,
       y,
       // is_valid: y !== null && y >= 5000 && y <= 20000, // Adjusted validation range for 5-digit numbers
       is_valid: y !== null, // Adjusted validation range for 5-digit numbers
       y_clean: y !== null ? y : null,
-      setValue: ''
+      setValue: '',
+      epochSecond: current.getTime() / 1000
     });
     
     // Move to next hour

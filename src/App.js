@@ -198,6 +198,7 @@ function App() {
               {data.map(row => (
                 <li key={row.ds} className="flex justify-between">
                   <span>{row.ds}</span>
+                  <span>{row.epochSecond}</span>
                   <span className="font-mono">{row.setValue || <span className="text-gray-400">(empty)</span>}</span>
                 </li>
               ))}
