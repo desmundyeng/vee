@@ -36,8 +36,9 @@ function generateDataForRange(startDateTime, endDateTime) {
     data.push({
       ds,
       y,
-      is_valid: y !== null && y >= 5000 && y <= 20000, // Adjusted validation range for 5-digit numbers
-      y_clean: y !== null && y >= 5000 && y <= 20000 ? y : null,
+      // is_valid: y !== null && y >= 5000 && y <= 20000, // Adjusted validation range for 5-digit numbers
+      is_valid: y !== null, // Adjusted validation range for 5-digit numbers
+      y_clean: y !== null ? y : null,
       setValue: ''
     });
     
