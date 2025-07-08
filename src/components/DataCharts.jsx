@@ -50,8 +50,6 @@ const DataCharts = ({ data }) => {
   function formatEpochToLocal(epochSec) {
     if (!epochSec) return '';
     const date = new Date(epochSec * 1000);
-    console.log(date);
-    console.log(epochSec);
     const pad = n => n.toString().padStart(2, '0');
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
   }
@@ -82,11 +80,12 @@ const DataCharts = ({ data }) => {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
           dataKey="epoch"
-          angle={-45}
           textAnchor="end"
           height={80}
           interval={0}
+          ticks={data.map(d => d.epochSecond)} // force every data point as a tick
           tickFormatter={value => formatEpochToLocal(value)}
+          tick={{ fontSize: '12px', angle: -15, textAnchor: 'end' }}
           domain={[minEpoch, maxEpoch]}
           type="number"
         />

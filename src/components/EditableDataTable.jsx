@@ -33,8 +33,6 @@ export function EditableDataTable({ data, setManualValue, validationRange }) {
     function formatEpochToLocal(epochSec) {
         if (!epochSec) return '';
         const date = new Date(epochSec * 1000);
-        console.log(date);
-        console.log(epochSec);
         const pad = n => n.toString().padStart(2, '0');
         return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
     }

@@ -33,7 +33,6 @@ function generateDataForRange(startDateTime, endDateTime) {
       y = formatNumber(y);
     }
     
-    console.log("c" + current.getTime())
     data.push({
       ds,
       y,
