@@ -17,7 +17,12 @@ VEE is an interactive web application for cleaning, validating, estimating, and 
 - Live-updating time series chart with original, estimated, and manual values
 - Date/time range picker to generate synthetic data for any period
 - All values formatted to 4 decimals (xxxxx.xxxx)
-- Debug section for manual and epoch values
+
+## Methods used
+- **Sample data generation:** hourly points following a sinusoidal daily cycle with random noise, plus injected gaps (~10% nulls) and anomalies (~5% spikes).
+- **Validation:** range threshold check. Each reading is compared against a user-defined Min/Max range; missing or out-of-range values are flagged invalid.
+- **Estimation:** linear interpolation. Each gap is estimated along a straight line between the nearest valid points on either side; edge gaps fall back to the nearest valid value.
+- **Editing:** manual override. A hand-entered value takes priority over the estimated value for that row.
 
 ## Demo
 

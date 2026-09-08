@@ -150,10 +150,15 @@ export function EditableDataTable({ data, setManualValue, validationRange }) {
             <Edit className="h-5 w-5 text-amber-500" />
             Step 3: Editing
           </CardTitle>
+          <div className="mt-1 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+              Method: Manual override
+            </span>
+          </div>
           <p className="text-sm text-gray-500 mt-1">
             Review each reading side by side: the original value, its validation status, and the estimated value.
             Click the <Pencil className="inline h-3.5 w-3.5 text-gray-500 align-text-bottom" /> pencil in the
-            "Manual Edit" column to override a value by hand.
+            "Manual Edit" column to manually override a value. Your override takes priority over the estimated value.
           </p>
         </CardHeader>
         <CardContent className="space-y-6">

@@ -124,7 +124,8 @@ function App() {
             <div className="mb-3">
               <h2 className="text-lg font-semibold text-gray-900">Generate sample data</h2>
               <p className="text-sm text-gray-500">
-                Pick a start and end date/time, then generate hourly time series data (with random gaps and anomalies) to clean.
+                Pick a start and end date/time, then generate hourly time series data to clean. Samples follow a
+                sinusoidal daily cycle with random noise, plus injected gaps (~10% nulls) and anomalies (~5% spikes).
               </p>
             </div>
             <div className="flex flex-col md:flex-row gap-4 items-center justify-center">

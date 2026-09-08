@@ -16,9 +16,16 @@ const EstimationStep = ({ onEstimate, data }) => {
           <TrendingUp className="h-5 w-5 text-green-600" />
           Step 2: Estimation
         </CardTitle>
+        <div className="mt-1 flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+            Method: Linear interpolation
+          </span>
+        </div>
         <p className="text-sm text-gray-500 mt-1">
-          Missing and invalid readings are filled in automatically using linear interpolation between the
-          nearest valid points. This runs every time you change the validation range in Step 1.
+          Missing and invalid readings are filled in automatically using linear interpolation: each gap is
+          estimated along a straight line drawn between the nearest valid points before and after it. Edge
+          gaps (no neighbor on one side) fall back to the nearest valid value. This runs every time you
+          change the validation range in Step 1.
         </p>
       </CardHeader>
       <CardContent className="space-y-6 mt-2">

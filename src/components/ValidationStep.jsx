@@ -52,9 +52,15 @@ const ValidationStep = ({ onValidate, data, originalData, validationRange }) => 
           <CheckCircle className="h-5 w-5 text-blue-600" />
           Step 1: Validation
         </CardTitle>
+        <div className="mt-1 flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
+            Method: Range threshold check
+          </span>
+        </div>
         <p className="text-sm text-gray-500 mt-1">
-          Set the acceptable value range. Readings outside this range (or with no data) are flagged as
-          invalid and will be re-estimated in Step 2. Drag the slider or type exact Min/Max values.
+          Each reading is checked against a Min/Max range (a threshold rule): values inside the range are
+          marked valid, while missing values or values outside the range are flagged invalid and re-estimated
+          in Step 2. Drag the slider or type exact Min/Max values.
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
