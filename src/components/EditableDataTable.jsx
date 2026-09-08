@@ -28,7 +28,7 @@ import { Edit, Pencil } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
-// DataTable expects data in this format:
+// Renders the Step 3 editing table (date, status, original, estimated, manual edit).
 export function EditableDataTable({ data, setManualValue, validationRange }) {
     function formatEpochToLocal(epochSec) {
         if (!epochSec) return '';
@@ -221,6 +221,7 @@ function SetValueDialogCell({ value, estimated, onChange }) {
                     </DialogHeader>
                     <input
                         type="text"
+                        aria-label="Manual value"
                         className="border rounded px-2 py-1 w-full mt-4"
                         value={inputValue}
                         onChange={e => {

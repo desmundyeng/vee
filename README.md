@@ -4,6 +4,13 @@
 
 VEE is an interactive web application for cleaning, validating, estimating, and manually editing time series data. It is designed to help users quickly identify outliers, interpolate missing or invalid values, and make manual corrections—all with real-time feedback and visualizations.
 
+- **Repository:** [github.com/desmundyeng/vee](https://github.com/desmundyeng/vee)
+- **Live demo:** [desmundyeng.github.io/vee](https://desmundyeng.github.io/vee/)
+
+## Screenshot
+
+![VEE application screenshot](docs/screenshot.png)
+
 ## What is VEE?
 
 **VEE** stands for **Validation, Estimation, and Editing**:

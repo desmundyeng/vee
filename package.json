@@ -4,7 +4,6 @@
   "private": true,
   "homepage": "https://desmundyeng.github.io/vee",
   "dependencies": {
-    "@radix-ui/react-checkbox": "^1.3.2",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-slider": "^1.3.5",
     "@tanstack/react-table": "^8.21.3",
@@ -12,7 +11,6 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
-    "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.525.0",
     "react": "^19.1.0",

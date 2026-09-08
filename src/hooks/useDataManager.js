@@ -36,8 +36,7 @@ function generateDataForRange(startDateTime, endDateTime) {
     data.push({
       ds,
       y,
-      // is_valid: y !== null && y >= 5000 && y <= 20000, // Adjusted validation range for 5-digit numbers
-      is_valid: y !== null, // Adjusted validation range for 5-digit numbers
+      is_valid: y !== null,
       y_clean: y !== null ? y : null,
       setValue: '',
       epochSecond: current.getTime() / 1000
@@ -114,28 +113,31 @@ export const useDataManager = (startDateTime, endDateTime) => {
       for (let i = 0; i < newData.length; i++) {
         if (newData[i].lock) continue; // skip locked
         if (newData[i].y_clean === null) {
-          // Find previous valid value (not locked)
+          // Find index of the previous valid value (not locked)
           let prevValid = null;
-          let prevIndex = i - 1;
-          while (prevIndex >= 0 && prevValid === null) {
-            if (!newData[prevIndex].lock && newData[prevIndex].y_clean !== null) {
-              prevValid = newData[prevIndex].y_clean;
+          let prevValidIndex = -1;
+          for (let p = i - 1; p >= 0; p--) {
+            if (!newData[p].lock && newData[p].y_clean !== null) {
+              prevValid = newData[p].y_clean;
+              prevValidIndex = p;
+              break;
             }
-            prevIndex--;
           }
-          // Find next valid value (not locked)
+          // Find index of the next valid value (not locked)
           let nextValid = null;
-          let nextIndex = i + 1;
-          while (nextIndex < newData.length && nextValid === null) {
-            if (!newData[nextIndex].lock && newData[nextIndex].y_clean !== null) {
-              nextValid = newData[nextIndex].y_clean;
+          let nextValidIndex = -1;
+          for (let n = i + 1; n < newData.length; n++) {
+            if (!newData[n].lock && newData[n].y_clean !== null) {
+              nextValid = newData[n].y_clean;
+              nextValidIndex = n;
+              break;
             }
-            nextIndex++;
           }
-          // Interpolate
+          // Interpolate linearly between the two nearest valid points
           if (prevValid !== null && nextValid !== null) {
-            const totalSteps = nextIndex - prevIndex - 2;
-            const currentStep = i - prevIndex - 1;
+            const totalSteps = nextValidIndex - prevValidIndex;
+            const currentStep = i - prevValidIndex;
+            // totalSteps is always >= 2 here (a gap sits between the two), so it is safe to divide
             newData[i].y_clean = prevValid + (nextValid - prevValid) * (currentStep / totalSteps);
           } else if (prevValid !== null) {
             newData[i].y_clean = prevValid;

@@ -32,7 +32,7 @@ const DataCharts = ({ data }) => {
     setValue: (row.setValue !== '' && row.setValue !== null && row.setValue !== undefined && !isNaN(Number(row.setValue)))
       ? Number(row.setValue)
       : (row.y_clean !== null && row.y_clean !== undefined && !isNaN(Number(row.y_clean)) ? Number(row.y_clean) : null),
-    status: row.status ? 'Valid' : 'Invalid'
+    status: row.is_valid ? 'Valid' : 'Invalid'
   }));
 
   // State for toggling line visibility

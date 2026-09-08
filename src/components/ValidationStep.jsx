@@ -67,9 +67,11 @@ const ValidationStep = ({ onValidate, data, originalData, validationRange }) => 
         <div className="space-y-2 mt-2">
           <div className="flex items-center gap-4">
             <div className="flex flex-col items-center">
-              <label className="text-xs text-gray-500">Min</label>
+              <label htmlFor="validation-min" className="text-xs text-gray-500">Min</label>
               <Input
+                id="validation-min"
                 type="text"
+                aria-label="Minimum valid value"
                 min={MIN}
                 max={validationRange[1] - MIN_DISTANCE}
                 value={Number(validationRange[0]).toFixed(4)}
@@ -84,14 +86,6 @@ const ValidationStep = ({ onValidate, data, originalData, validationRange }) => 
               />
             </div>
             <div className="flex-1 flex flex-col items-center">
-              <div className="flex justify-between w-full mb-1">
-                {/* <span className="text-xs text-gray-500" style={{ flex: 1, textAlign: 'left' }}>
-                  Min: {validationRange[0]}
-                </span>
-                <span className="text-xs text-gray-500" style={{ flex: 1, textAlign: 'right', visibility: 'hidden' }}>
-                  Max: {validationRange[1]}
-                </span> */}
-              </div>
               <DualRangeSlider
                 value={validationRange}
                 min={MIN}
@@ -99,19 +93,13 @@ const ValidationStep = ({ onValidate, data, originalData, validationRange }) => 
                 step={1}
                 onValueChange={handleRangeChange}
               />
-              {/* <div className="flex justify-between w-full mt-1">
-                <span className="text-xs text-gray-500" style={{ flex: 1, textAlign: 'left', visibility: 'hidden' }}>
-                  Min: {validationRange[0]}
-                </span>
-                <span className="text-xs text-gray-500" style={{ flex: 1, textAlign: 'right' }}>
-                  Max: {validationRange[1]}
-                </span>
-              </div> */}
             </div>
             <div className="flex flex-col items-center">
-              <label className="text-xs text-gray-500">Max</label>
+              <label htmlFor="validation-max" className="text-xs text-gray-500">Max</label>
               <Input
+                id="validation-max"
                 type="text"
+                aria-label="Maximum valid value"
                 min={validationRange[0] + MIN_DISTANCE}
                 max={MAX}
                 value={Number(validationRange[1]).toFixed(4)}
