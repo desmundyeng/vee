@@ -21,9 +21,7 @@ VEE is an interactive web application for cleaning, validating, estimating, and 
 
 ## Demo
 
-👉 **[View the live demo on GitHub Pages](https://your-github-username.github.io/vee/)**
-
-> Replace the above link with your actual GitHub Pages deployment URL.
+👉 **[View the live demo on GitHub Pages](https://desmundyeng.github.io/vee/)**
 
 ## Getting Started
 
@@ -50,6 +48,24 @@ The app will be available at [http://localhost:3000](http://localhost:3000).
 ```bash
 npm run build
 ```
+
+## Deployment (GitHub Pages)
+
+This project deploys to GitHub Pages at the URL set in the `homepage` field of `package.json`.
+
+There are two ways to deploy:
+
+1. **Automatic (recommended):** A GitHub Actions workflow (`.github/workflows/deploy.yml`) builds and
+   deploys the app on every push to `master`. Enable it once under
+   **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+
+2. **Manual:** Publish the `build` folder to the `gh-pages` branch:
+
+   ```bash
+   npm run deploy
+   ```
+
+   Then set **Settings → Pages → Source** to the `gh-pages` branch.
 
 ## License
 

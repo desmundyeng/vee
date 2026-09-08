@@ -1,7 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Range, getTrackBackground } from 'react-range';
 import { CheckCircle, AlertCircle } from 'lucide-react';
 import { DualRangeSlider } from './ui/DualRangeSlider';
 import { Input } from './ui/input';
@@ -11,16 +9,6 @@ const MAX = 99999;
 const MIN_DISTANCE = 1;
 
 const ValidationStep = ({ onValidate, data, originalData, validationRange }) => {
-  // Compute min/max from data
-  const dataMin = useMemo(() => {
-    const vals = data.map(row => row.y).filter(v => typeof v === 'number');
-    return vals.length ? Math.min(...vals) : MIN;
-  }, [data]);
-  const dataMax = useMemo(() => {
-    const vals = data.map(row => row.y).filter(v => typeof v === 'number');
-    return vals.length ? Math.max(...vals) : MAX;
-  }, [data]);
-
   // Manual input handlers
   const handleInputChange = (idx, value) => {
     let val = Number(value);
@@ -50,10 +38,6 @@ const ValidationStep = ({ onValidate, data, originalData, validationRange }) => 
     }
   };
 
-  const handleValidate = () => {
-    onValidate(validationRange[0], validationRange[1]);
-  };
-
   const validCount = data.filter(row => row.is_valid).length;
   const invalidCount = data.filter(row => !row.is_valid).length;
   // Compute removed count: original values that do not fall within the current validation range
@@ -68,6 +52,10 @@ const ValidationStep = ({ onValidate, data, originalData, validationRange }) => 
           <CheckCircle className="h-5 w-5 text-blue-600" />
           Step 1: Validation
         </CardTitle>
+        <p className="text-sm text-gray-500 mt-1">
+          Set the acceptable value range. Readings outside this range (or with no data) are flagged as
+          invalid and will be re-estimated in Step 2. Drag the slider or type exact Min/Max values.
+        </p>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2 mt-2">
@@ -133,30 +121,26 @@ const ValidationStep = ({ onValidate, data, originalData, validationRange }) => 
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-600" />
-              <span className="text-sm text-gray-600">
-                Valid: {validCount}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 text-red-600" />
-              <span className="text-sm text-gray-600">
-                Invalid: {invalidCount}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 text-yellow-500" />
-              <span className="text-sm text-gray-600">
-                Removed: {removedCount}
-              </span>
-            </div>
+        <div className="flex flex-wrap items-center gap-4 border-t border-gray-100 pt-4">
+          <div className="flex items-center gap-2" title="Points that fall within the range">
+            <CheckCircle className="h-4 w-4 text-green-600" />
+            <span className="text-sm text-gray-600">
+              Valid (in range): {validCount}
+            </span>
+          </div>
+          <div className="flex items-center gap-2" title="Points flagged as invalid">
+            <AlertCircle className="h-4 w-4 text-red-600" />
+            <span className="text-sm text-gray-600">
+              Invalid: {invalidCount}
+            </span>
+          </div>
+          <div className="flex items-center gap-2" title="Points removed because they are missing or out of range">
+            <AlertCircle className="h-4 w-4 text-yellow-500" />
+            <span className="text-sm text-gray-600">
+              Missing / out of range: {removedCount}
+            </span>
           </div>
         </div>
-        {/* Debug info - remove after verification */}
-        <div className="text-xs text-gray-400 mt-2">Range: [{validationRange[0]}, {validationRange[1]}], Removed: {removedCount}</div>
       </CardContent>
     </Card>
   );

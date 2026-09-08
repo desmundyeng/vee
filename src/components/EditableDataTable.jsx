@@ -4,8 +4,6 @@ import {
     getCoreRowModel,
     flexRender,
 } from "@tanstack/react-table";
-import { Checkbox } from "./ui/checkbox";
-import { Input } from "./ui/input";
 import {
     Table,
     TableBody,
@@ -57,11 +55,12 @@ export function EditableDataTable({ data, setManualValue, validationRange }) {
                 ),
                 cell: (info) => {
                     const row = info.row.original;
-                    // Show 'Out of Range' if y is outside validationRange
+                    // Show 'Out of Range' if y is a real number outside validationRange
                     const isEmpty = row.y === null;
                     const outOfRange =
+                        !isEmpty &&
                         validationRange &&
-                        (row.y !== null || row.y < validationRange[0] || row.y > validationRange[1]);
+                        (row.y < validationRange[0] || row.y > validationRange[1]);
 
                     return (
                         <>
@@ -134,7 +133,7 @@ export function EditableDataTable({ data, setManualValue, validationRange }) {
                 ),
             },
         ],
-        [data]
+        [setManualValue, validationRange]
     );
 
     const table = useReactTable({
@@ -151,6 +150,11 @@ export function EditableDataTable({ data, setManualValue, validationRange }) {
             <Edit className="h-5 w-5 text-amber-500" />
             Step 3: Editing
           </CardTitle>
+          <p className="text-sm text-gray-500 mt-1">
+            Review each reading side by side: the original value, its validation status, and the estimated value.
+            Click the <Pencil className="inline h-3.5 w-3.5 text-gray-500 align-text-bottom" /> pencil in the
+            "Manual Edit" column to override a value by hand.
+          </p>
         </CardHeader>
         <CardContent className="space-y-6">
         <div className="w-full">
@@ -192,8 +196,6 @@ function SetValueDialogCell({ value, estimated, onChange }) {
     const [open, setOpen] = React.useState(false);
     const [inputValue, setInputValue] = React.useState(initial);
     React.useEffect(() => { if (open) setInputValue(initial); }, [initial, open]);
-    const num = Number(inputValue);
-    const formatted = inputValue !== "" && inputValue !== null && inputValue !== undefined && !isNaN(num) ? num.toFixed(4) : "";
     return (
         <div className="flex items-center justify-end gap-2 w-full">
             <span className="text-right block flex-1">

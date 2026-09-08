@@ -2,12 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDataManager } from "./hooks/useDataManager";
 import ValidationStep from "./components/ValidationStep";
 import EstimationStep from "./components/EstimationStep";
-import EditingStep from "./components/EditingStep";
-import DataTable from "./components/DataTable";
 import DataCharts from "./components/DataCharts";
-import DataSummary from "./components/DataSummary";
 import { Button } from "./components/ui/button";
-import { RotateCcw, Download, Github } from "lucide-react";
+import { Download, Github } from "lucide-react";
 import { EditableDataTable } from "./components/EditableDataTable";
 import { Input } from "./components/ui/input";
 
@@ -28,10 +25,6 @@ function App() {
     data,
     validateData,
     estimateData,
-    editSingleValue,
-    editBulkValues,
-    resetData,
-    setLocks,
     originalData,
     setManualValue,
     updateDataForNewRange,
@@ -110,82 +103,80 @@ function App() {
             </div>
             <p className="text-lg text-gray-600 ">
               Interactive data validation, estimation, and editing for time series data.
-              Clean data step by step with real-time feedback and visualizations.
+              Clean your data in three guided steps with real-time charts and instant feedback.
             </p>
+            {/* Workflow overview */}
+            <div className="flex flex-wrap gap-3 pt-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700">
+                1. Validate <span className="text-blue-500">flag out-of-range points</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1 text-sm font-medium text-green-700">
+                2. Estimate <span className="text-green-600">fill gaps automatically</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">
+                3. Edit <span className="text-amber-600">fine-tune values by hand</span>
+              </span>
+            </div>
           </div>
 
           {/* Date/Time Pickers */}
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-center bg-white rounded-lg shadow p-4">
-            <div className="flex flex-col items-start w-full md:w-auto">
-              <label htmlFor="start-datetime" className="mb-1 font-medium text-gray-700">Start Date Time</label>
-              <Input
-                id="start-datetime"
-                type="datetime-local"
-                value={startDateTime}
-                onChange={e => setStartDateTime(e.target.value)}
-                className="w-56"
-              />
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="mb-3">
+              <h2 className="text-lg font-semibold text-gray-900">Generate sample data</h2>
+              <p className="text-sm text-gray-500">
+                Pick a start and end date/time, then generate hourly time series data (with random gaps and anomalies) to clean.
+              </p>
             </div>
-            <div className="h-full center pt-6">
-              -
-            </div>
-            <div className="flex flex-col items-start w-full md:w-auto">
-              <label htmlFor="end-datetime" className="mb-1 font-medium text-gray-700">End Date Time</label>
-              <Input
-                id="end-datetime"
-                type="datetime-local"
-                value={endDateTime}
-                onChange={e => setEndDateTime(e.target.value)}
-                className="w-56"
-              />
-            </div>
-            <div className="flex items-end pt-7">
-              <Button
-                onClick={updateDataForNewRange}
-              >
-                Generate Data
-              </Button>
-              
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
+              <div className="flex flex-col items-start w-full md:w-auto">
+                <label htmlFor="start-datetime" className="mb-1 font-medium text-gray-700">Start date &amp; time</label>
+                <Input
+                  id="start-datetime"
+                  type="datetime-local"
+                  value={startDateTime}
+                  onChange={e => setStartDateTime(e.target.value)}
+                  className="w-56"
+                />
+              </div>
+              <div className="h-full center pt-6">
+                -
+              </div>
+              <div className="flex flex-col items-start w-full md:w-auto">
+                <label htmlFor="end-datetime" className="mb-1 font-medium text-gray-700">End date &amp; time</label>
+                <Input
+                  id="end-datetime"
+                  type="datetime-local"
+                  value={endDateTime}
+                  onChange={e => setEndDateTime(e.target.value)}
+                  className="w-56"
+                />
+              </div>
+              <div className="flex items-end pt-7">
+                <Button
+                  onClick={updateDataForNewRange}
+                >
+                  Generate Data
+                </Button>
+              </div>
             </div>
           </div>
 
-
-          {/* Action Buttons */}
-          {/* <div className="flex justify-center gap-4">
-            <Button
-              variant="outline"
-              onClick={resetData}
-              className="flex items-center gap-2"
-            >
-              <RotateCcw className="h-4 w-4" />
-              Reset Data
-            </Button>
-            <Button
-              onClick={handleExportData}
-              className="flex items-center gap-2"
-            >
-              <Download className="h-4 w-4" />
-              Export CSV
-            </Button>
-          </div> */}
-
-          {/* Data Overview and Time Series Chart Side by Side */}
-          {/* <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="bg-white rounded-lg shadow p-6 h-[500px] overflow-auto w-full">
-              <h2 className="text-xl font-semibold mb-4">Data Overview</h2>
-              <DataTable data={data} />
-            </div>
-          </div> */}
-
           {/* Time Series Chart - Right */}
-          <div className="bg-white rounded-lg shadow h-[500px] flex flex-col justify-center w-full p-4">
-            <h2 className="text-xl font-semibold mb-4">Time Series Data</h2>
+          <div className="bg-white rounded-lg shadow h-[520px] flex flex-col w-full p-4">
+            <div className="mb-3">
+              <h2 className="text-xl font-semibold">Time series overview</h2>
+              <p className="text-sm text-gray-500">
+                Compare the <span className="text-gray-600 font-medium">Original</span> readings,
+                the <span className="text-blue-600 font-medium">Estimated</span> (interpolated) values, and your
+                <span className="text-amber-600 font-medium"> Manual Edits</span>. Click a legend item to show or hide a line.
+              </p>
+            </div>
             <div className="flex-1 min-h-0">
               <DataCharts data={data} />
             </div>
           </div>
           {/* Step 1 and Step 2 side by side */}
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 ">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <ValidationStep 
               onValidate={handleValidate}
               data={data}
@@ -204,37 +195,33 @@ function App() {
             validationRange={validationRange}
           />
 
-          {/* Debug: Print Manual Edit values above the chart */}
-          <div className="bg-yellow-50 border border-yellow-200 rounded p-4 mb-4 text-xs text-gray-700">
-            <div className="font-semibold mb-2">Manual Edit Values (Debug):</div>
-            <ul className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-1">
-              {data.map(row => (
-                <li key={row.ds} className="flex justify-between">
-                  <span>{row.ds}</span>
-                  <span>{row.epochSecond}</span>
-                  <span className="font-mono">{row.setValue || <span className="text-gray-400">(empty)</span>}</span>
-                </li>
-              ))}
-            </ul>
+          {/* Export */}
+          <div className="flex justify-end">
+            <Button
+              variant="outline"
+              onClick={handleExportData}
+              className="flex items-center gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Export cleaned data (CSV)
+            </Button>
           </div>
 
-          {/* Main Content - Horizontal Layout */}
-          <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left Column - Steps */}
-            {/* <div className="space-y-6">
-              <EditingStep
-                onSingleEdit={editSingleValue}
-                onBulkEdit={editBulkValues}
-                data={data}
-              />
-            </div> */}
-
-            {/* Right Column - Data Summary */}
-            {/* <div className="space-y-6"> */}
-              {/* Data Summary */}
-              {/* <DataSummary data={data} /> */}
-            {/* </div> */}
-          </div>
+          {/* Footer */}
+          <footer className="border-t border-gray-200 pt-6 pb-2 text-center text-sm text-gray-500">
+            <p>
+              VEE — Validation, Estimation, and Editing for time series data. Built with React, Tailwind CSS, and Recharts.
+            </p>
+            <a
+              href="https://github.com/desmundyeng/vee"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 mt-2 text-gray-600 hover:text-gray-900"
+            >
+              <Github className="w-4 h-4" />
+              View source on GitHub
+            </a>
+          </footer>
         </div>
       </div>
     </div>
